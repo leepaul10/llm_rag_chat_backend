@@ -1,0 +1,233 @@
+/* Reset & base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #4a4f53; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 10px; 
+    color: #9d9d9d;
+}
+
+/* Container */
+.container {
+    background: rgb(32, 30, 30);
+    width: 100%; 
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(98, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    max-height: 600px;
+    overflow: hidden;
+}
+
+/* Header */
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ff4000;
+    background: #292a2b;
+    flex-shrink: 0; 
+}
+
+/* Header Logo */
+.bot-header-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* Bot Info */
+.bot-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bot-info h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Chatbox */
+.chatbox {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Messages */
+.message {
+    display: flex;
+    align-items: flex-end;
+    max-width: 85%;
+    min-width: 0; /* 🔥 critical fix */
+}
+
+.message.user {
+    align-self: flex-end;
+}
+
+.message.bot {
+    align-self: flex-start;
+}
+
+/* Chat logo inside messages */
+.message.bot .bot-chat-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+/* Text Bubble */
+.text-bubble {
+    background: #484444;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+
+    /* 🔥 WRAPPING FIX */
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+
+    min-width: 0;
+    max-width: 100%;
+
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+/* User vs Bot */
+.message.user .text-bubble {
+    background: #a7efaf;
+    color: rgb(11, 12, 13);
+    border-bottom-right-radius: 4px;
+}
+
+.message.bot .text-bubble {
+    background: #f2f2f2;
+    color: #191a1c;
+    border-bottom-left-radius: 4px;
+}
+
+/* Markdown Styling */
+.text-bubble p {
+    margin: 8px 0;
+}
+
+.text-bubble p:first-child {
+    margin-top: 0;
+}
+
+.text-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.text-bubble ul,
+.text-bubble ol {
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.text-bubble li {
+    margin-bottom: 5px;
+}
+
+.text-bubble strong {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #007bff;
+    font-weight: 700;
+}
+
+/* Input area */
+.input-area {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #212121;
+    border-top: 1px solid #b03921;
+    flex-shrink: 0;
+}
+
+/* Input field */
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    background: #353535;        /* dark gray background */
+    outline: none;
+    transition: background-color 0.3s ease;
+    min-width: 0;
+    color: #d7d7d7;             /* typed text color (white) */
+}
+
+/* Placeholder text */
+input[type="text"]::placeholder {
+    color: #b5b2b2;             /* ChatGPT green */
+    opacity: 1;                 /* ensures full color visibility */
+}
+
+/* Input focus */
+input[type="text"]:focus {
+    background: #0b0b0b;        /* light gray when typing */
+}
+
+/* Send button */
+button {
+    background: transparent;
+    color: #ff5e00;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+button:disabled {
+    color: #c0c0c0;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    color: #0095ff;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    body {
+        padding: 0;
+    }
+
+    .container {
+        max-height: 100vh;
+        border-radius: 0;
+    }
+}
