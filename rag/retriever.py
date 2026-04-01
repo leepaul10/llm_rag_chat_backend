@@ -5,9 +5,9 @@ import pickle
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-index = faiss.read_index("backend/rag/index.faiss")
+index = faiss.read_index("rag/index.faiss")
 
-with open("backend/rag/chunks.pkl", "rb") as f:
+with open("rag/chunks.pkl", "rb") as f:
     chunks = pickle.load(f)
 
 RELEVANCE_THRESHOLD = 0.4  # cosine similarity threshold (0 to 1)
