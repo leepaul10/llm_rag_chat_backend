@@ -19,7 +19,7 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
-    allow_credentials=False  # Fixed: cannot use wildcard origins with credentials=True
+    allow_credentials=False  # Fixed: cannot use wildcard origins with credentials=Tru
 )
 
 conversation_history = []
