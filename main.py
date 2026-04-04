@@ -56,16 +56,20 @@ def get_bot_response(user_message):
         context, score, use_rag=retrieve(user_message)
         print("RAG SCORE:", score)
         if use_rag:
-            user_prompt=f"""Use the context below to answer the question.
-If the context doesn't contain the answer, say "I don't know."
+            user_prompt=f"""You have the following context available:
 Context:
 {context}
-Question:
-{user_message}"""
-            print("USING RAG")
+
+Question: {user_message}
+
+Instructions:
+1. If the context answers the question, use it with "Based on provided context..."
+2. If the context is NOT relevant to the question, IGNORE it and use your general knowledge
+3. Always provide the best answer, whether from context or general knowledge"""
+            print("USING RAG + Smart Fallback")
         else:
             user_prompt=user_message
-            print("USING CHAT (LLM ONLY)")
+            print("USING LLM ONLY")
         #Append original message to conversation history
         conversation_history.append({"role": "user", "content": user_message})
         #Build messages for LLM
