@@ -49,6 +49,11 @@ app.add_middleware(
     allow_credentials=False
 )
 conversation_history = []
+conversation_history = []
+
+def reset_conversation():
+    global conversation_history
+    conversation_history = []
 class ChatRequest(BaseModel):
     message: str
 def get_bot_response(user_message):
@@ -56,12 +61,12 @@ def get_bot_response(user_message):
         context, score, use_rag=retrieve(user_message)
         print("RAG SCORE:", score)
         # ✅ Check if query is AMBIGUOUS
-        if use_rag and 0.65 < score < 0.80:
+        if use_rag and 0.65 < score < 0.72:
             clarify_prompt = f"User asked: '{user_message}'. This is ambiguous. Ask them to clarify in 1-2 sentences only."
             messages = [{"role": "system", "content": SYSTEM_PROMPT},
                        {"role": "user", "content": clarify_prompt}]
             clarification = client.chat.completions.create(messages=messages, model="llama-3.3-70b-versatile")
-            return " " + clarification.choices[0].message.content
+            return "" + clarification.choices[0].message.content
  
 
         if use_rag:
@@ -84,7 +89,7 @@ Instructions:
         #Build messages for LLM
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT}
-        ] + conversation_history[-6:]
+        ] + conversation_history[-10:]
         #Replace the last user message with the one that includes RAG context if needed
         messages[-1]["content"]=user_prompt
         chat_completion=client.chat.completions.create(
@@ -98,6 +103,10 @@ Instructions:
     except Exception as e:
         print("ERROR:", e)
         return f"Error: {str(e)}"
+@app.post("/clear")
+def clear_chat():
+    reset_conversation()
+    return {"message": "Chat cleared"}
 @app.post("/chat")
 def chat(request: ChatRequest):
     return {"reply": get_bot_response(request.message)}
