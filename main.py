@@ -61,7 +61,7 @@ def get_bot_response(user_message):
             messages = [{"role": "system", "content": SYSTEM_PROMPT},
                        {"role": "user", "content": clarify_prompt}]
             clarification = client.chat.completions.create(messages=messages, model="llama-3.3-70b-versatile")
-            return "❓ " + clarification.choices[0].message.content
+            return " " + clarification.choices[0].message.content
  
 
         if use_rag:
