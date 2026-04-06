@@ -89,7 +89,8 @@ Question: {user_message}
 Instructions:
 1. If the context answers the question, use it with "Based on provided context..."
 2. If the context is NOT relevant to the question, IGNORE it and use your general knowledge
-3. Always provide the best answer, whether from context or general knowledge"""
+3. Always provide the best answer, whether from context or general knowledge
+4. If ambiguity or confusion occurs ask the user about clarification and proceed with it dont rethink for simple things and try to obey the user"""
             print("USING RAG + Smart Fallback")
         else:
             user_prompt=user_message
