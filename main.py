@@ -65,7 +65,7 @@ def get_bot_response(user_message):
         context, score, use_rag=retrieve(user_message)
         print("RAG SCORE:", score)
         # ✅ Check if query is AMBIGUOUS
-        if use_rag and 0.65 < score < 0.72:
+        if use_rag and 0.65 < score < 0.69:
             clarify_prompt = f"User asked: '{user_message}'. This is ambiguous. Ask them to clarify in 1-2 sentences only."
             messages = [{"role": "system", "content": SYSTEM_PROMPT},
                        {"role": "user", "content": clarify_prompt}]
