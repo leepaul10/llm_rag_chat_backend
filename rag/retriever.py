@@ -25,3 +25,5 @@ def retrieve(query, k=3):
         context=""
     return context, best_score, use_rag
 
+
+
