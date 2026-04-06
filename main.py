@@ -68,12 +68,16 @@ class ChatRequest(BaseModel):
     message: str
 def get_bot_response(user_message):
     try:
-        context, score, use_rag, is_ambiguous = retrieve(user_message)
-        print("RAG SCORE:", score, "AMBIGUOUS:", is_ambiguous)
-
-        # ✅ Handle actual ambiguity from retriever
-        if is_ambiguous:
-            return f"Your query seems ambiguous: '{user_message}'. Could you clarify what you mean?"
+        context, score, use_rag=retrieve(user_message)
+        print("RAG SCORE:", score)
+        # ✅ Check if query is AMBIGUOUS
+        if use_rag and 0.65 < score < 0.69:
+            clarify_prompt = f"User asked: '{user_message}'. This is ambiguous. Ask them to clarify in 1-2 sentences only."
+            messages = [{"role": "system", "content": SYSTEM_PROMPT},
+                       {"role": "user", "content": clarify_prompt}]
+            clarification = client.chat.completions.create(messages=messages, model="llama-3.3-70b-versatile")
+            return "" + clarification.choices[0].message.content
+ 
 
         if use_rag:
             user_prompt=f"""You have the following context available:
@@ -91,14 +95,14 @@ Instructions:
         else:
             user_prompt=user_message
             print("USING LLM ONLY")
-
-        # Append original message to conversation history
+        #Append original message to conversation history
         conversation_history.append({"role": "user", "content": user_message})
-
-        # Build messages for LLM
-        messages=[{"role": "system", "content": SYSTEM_PROMPT}] + conversation_history[-10:]
+        #Build messages for LLM
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT}
+        ] + conversation_history[-10:]
+        #Replace the last user message with the one that includes RAG context if needed
         messages[-1]["content"]=user_prompt
-
         chat_completion=client.chat.completions.create(
             messages=messages,
             model="llama-3.3-70b-versatile",
@@ -107,7 +111,6 @@ Instructions:
         conversation_history.append({"role": "assistant", "content": assistant_reply})
         prefix="🔍RAG:  " if use_rag else "💡LLM:  "
         return prefix + assistant_reply
-
     except Exception as e:
         print("ERROR:", e)
         return f"Error: {str(e)}"
@@ -121,6 +124,3 @@ def chat(request: ChatRequest):
 @app.get("/")
 def root():
     return {"message": "RAG + LLM is running!"}
-
-
-
